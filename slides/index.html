@@ -1,0 +1,542 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fine-VAD 组会汇报 · 慧心·极目团队</title>
+<style>
+:root{
+  --g900:#0A3D2E; --g800:#0C4B38; --g700:#0F6B4F; --g600:#12805F; --g500:#17A06F;
+  --g100:#E8F5EF; --gold:#E8C24A; --gold2:#F3D98A; --gold6:#C99E25;
+  --ink:#182420; --ink2:#3C4A44; --muted:#6E7F78; --bg:#F6FAF8; --line:#DCE9E2;
+  --red:#C4432B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#08150F;
+  font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC","Segoe UI",sans-serif;}
+#stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;
+  transform:translate(-50%,-50%) scale(1);transform-origin:center center;
+  box-shadow:0 30px 80px rgba(0,0,0,.55);border-radius:2px;overflow:hidden;background:var(--bg);}
+.slide{position:absolute;inset:0;background:var(--bg);opacity:0;
+  transform:translateX(42px);transition:opacity .55s ease,transform .55s cubic-bezier(.22,.61,.36,1);
+  pointer-events:none;overflow:hidden;}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+
+/* ---------- 通用元素 ---------- */
+.fx{opacity:0;transform:translateY(18px);
+  transition:opacity .6s ease var(--d,0s),transform .6s cubic-bezier(.2,.7,.3,1) var(--d,0s);}
+.fx.on{opacity:1;transform:none;}
+.pad{position:absolute;inset:0;padding:40px 56px 52px;}
+.hd{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.hd .b1{width:6px;height:32px;border-radius:3px;background:linear-gradient(180deg,var(--gold),var(--gold2));}
+.hd .no{font-family:"Bahnschrift","Segoe UI",sans-serif;font-weight:700;font-size:15px;
+  color:var(--gold6);letter-spacing:.14em;transform:translateY(1px);}
+.hd h2{font-size:30px;font-weight:800;color:var(--g900);letter-spacing:.01em;}
+.hd .tag{margin-left:auto;font-size:13px;color:var(--muted);letter-spacing:.06em;}
+.foot{position:absolute;left:56px;right:56px;bottom:16px;display:flex;justify-content:space-between;
+  font-size:12px;color:#9AA8A2;letter-spacing:.05em;}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;
+  box-shadow:0 8px 24px rgba(12,75,56,.06);}
+.hl{color:var(--g700);font-weight:700;}
+.hl-gold{color:var(--gold6);font-weight:800;}
+
+/* ---------- 封面 ---------- */
+#s1{background:radial-gradient(1200px 700px at 82% -10%,#177A5B 0%,transparent 55%),
+             radial-gradient(900px 600px at -15% 110%,#0E5B45 0%,transparent 52%),
+             linear-gradient(135deg,#0A3D2E 0%,#0C4B38 48%,#0A3D2E 100%);}
+#s1 .glow1,#s1 .glow2{position:absolute;border-radius:50%;filter:blur(2px);opacity:.5;}
+#s1 .glow1{width:420px;height:420px;right:-120px;top:-140px;
+  background:radial-gradient(circle at 35% 35%,rgba(232,194,74,.55),rgba(232,194,74,0) 65%);
+  animation:float1 9s ease-in-out infinite;}
+#s1 .glow2{width:520px;height:520px;left:-180px;bottom:-220px;
+  background:radial-gradient(circle at 60% 40%,rgba(23,160,111,.5),rgba(23,160,111,0) 65%);
+  animation:float2 11s ease-in-out infinite;}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(-24px,18px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-16px)}}
+#s1 .grid{position:absolute;inset:0;opacity:.14;
+  background-image:linear-gradient(rgba(255,255,255,.22) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.22) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(80% 80% at 50% 40%,#000 30%,transparent 100%);}
+#s1 .topbar{position:absolute;top:34px;left:56px;right:56px;display:flex;align-items:center;gap:16px;}
+#s1 .logochip{width:64px;height:64px;border-radius:16px;background:#fff;display:flex;
+  align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(0,0,0,.28);}
+#s1 .logochip img{width:80%;height:80%;object-fit:contain;}
+#s1 .uni{color:#DCEFE6;}
+#s1 .uni b{display:block;font-size:17px;letter-spacing:.06em;}
+#s1 .uni span{font-size:12px;color:#9CC7B6;letter-spacing:.18em;}
+#s1 .datechip{margin-left:auto;color:#CDE7DB;font-size:13px;letter-spacing:.14em;
+  border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:8px 18px;}
+#s1 .center{position:absolute;left:80px;right:80px;top:190px;}
+#s1 .badge{display:inline-flex;align-items:center;gap:10px;background:rgba(232,194,74,.16);
+  border:1px solid rgba(232,194,74,.55);color:#F3D98A;border-radius:999px;
+  padding:9px 20px;font-size:14px;letter-spacing:.16em;font-weight:700;}
+#s1 .badge i{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);}
+#s1 h1{color:#FFFFFF;font-size:52px;line-height:1.24;margin:26px 0 14px;letter-spacing:.02em;
+  text-shadow:0 6px 30px rgba(0,0,0,.25);}
+#s1 .en{color:#B9DCCD;font-size:16px;line-height:1.6;max-width:1000px;letter-spacing:.01em;}
+#s1 .rule{width:110px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--gold),rgba(232,194,74,0));margin:30px 0 26px;}
+#s1 .meta{display:flex;gap:44px;color:#E7F4EE;font-size:16px;}
+#s1 .meta b{color:#fff;font-weight:700;}
+#s1 .meta .k{display:block;font-size:11px;color:#8FBEA9;letter-spacing:.22em;margin-bottom:6px;}
+#s1 .paperline{position:absolute;left:56px;right:56px;bottom:30px;color:#7FB39D;font-size:12px;
+  border-top:1px solid rgba(255,255,255,.12);padding-top:14px;letter-spacing:.04em;}
+
+/* ---------- Slide2 动机 ---------- */
+.col2{display:flex;gap:22px;}
+.problem{flex:1;padding:18px 20px;}
+.problem h3{font-size:17px;color:var(--g800);margin-bottom:8px;display:flex;align-items:center;gap:9px;}
+.problem h3 .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);flex:0 0 auto;}
+.problem p{font-size:14px;color:var(--ink2);line-height:1.62;}
+.obs{margin-top:16px;background:linear-gradient(90deg,#FFF9E8,#FFFDF6 65%,#fff);
+  border:1px solid #F0E3B4;border-left:5px solid var(--gold);border-radius:12px;padding:14px 18px;}
+.obs b{color:var(--gold6);}
+.obs p{font-size:14px;color:var(--ink2);line-height:1.6;}
+.trio{display:flex;gap:16px;}
+.trio .cell{flex:1;text-align:center;}
+.trio .cell .imgbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;
+  box-shadow:0 6px 18px rgba(12,75,56,.07);}
+.trio .cell img{width:100%;display:block;border-radius:6px;}
+.trio .cell .capT{font-size:13px;color:var(--ink);font-weight:700;margin-top:10px;}
+.trio .cell .capS{font-size:12px;color:var(--muted);margin-top:3px;}
+
+/* ---------- Slide3 框架 ---------- */
+.kpis{display:flex;gap:14px;margin-bottom:16px;}
+.kpi{flex:1;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;
+  background:#fff;border:1px solid var(--line);box-shadow:0 6px 18px rgba(12,75,56,.05);}
+.kpi .ico{width:34px;height:34px;border-radius:10px;background:var(--g100);display:flex;align-items:center;
+  justify-content:center;font-size:17px;flex:0 0 auto;}
+.kpi b{font-size:14px;color:var(--g900);display:block;}
+.kpi span{font-size:12px;color:var(--muted);}
+.figwrap{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;
+  box-shadow:0 10px 30px rgba(12,75,56,.08);display:flex;justify-content:center;}
+.figwrap img{max-width:100%;max-height:424px;width:auto;height:auto;display:block;border-radius:8px;}
+
+/* ---------- Slide4 机制 ---------- */
+.lv{display:flex;gap:18px;}
+.lv .col{flex:1;padding:16px 18px 14px;position:relative;overflow:hidden;}
+.lv .col .idx{position:absolute;right:-10px;top:-22px;font-family:"Bahnschrift",sans-serif;
+  font-weight:800;font-size:86px;color:var(--g100);z-index:0;}
+.lv h3{position:relative;font-size:18px;color:var(--g800);margin-bottom:4px;z-index:1;}
+.lv .sub{position:relative;font-size:12px;color:var(--gold6);letter-spacing:.1em;font-weight:700;margin-bottom:10px;z-index:1;}
+.lv ul{position:relative;list-style:none;z-index:1;}
+.lv li{font-size:13.5px;color:var(--ink2);line-height:1.6;padding-left:16px;margin-bottom:7px;position:relative;}
+.lv li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;
+  background:var(--g500);opacity:.85;}
+.lv li b{color:var(--g800);}
+.formulabar{margin-top:16px;background:linear-gradient(90deg,#0E5B45,#0F6B4F 55%,#12805F);
+  border-radius:16px;padding:16px 24px;display:flex;align-items:center;gap:26px;color:#fff;
+  box-shadow:0 14px 34px rgba(12,75,56,.25);}
+.formulabar .fx-title{font-size:12px;color:#B9DCCD;letter-spacing:.18em;margin-bottom:6px;}
+.formula{font-family:"Cambria Math","Times New Roman",serif;font-size:21px;line-height:1.5;}
+.formula .frac{display:inline-block;vertical-align:middle;text-align:center;font-size:15px;line-height:1.05;margin:0 2px;}
+.formula .frac span{display:block;padding:0 3px;}
+.formula .frac span:first-child{border-bottom:1.5px solid #fff;}
+.formula sub{font-size:12px;}
+.formula sup{font-size:12px;}
+.fb-note{font-size:12.5px;color:#CFE8DD;line-height:1.75;border-left:3px solid rgba(232,194,74,.8);padding-left:14px;}
+.fb-note b{color:#F3D98A;}
+.fb-note .w{color:#FFE9A6;font-weight:800;}
+
+/* ---------- Slide5 实验 ---------- */
+.bars{display:flex;flex-direction:column;gap:11px;}
+.barrow{display:flex;align-items:center;gap:12px;}
+.barrow .nm{width:132px;text-align:right;font-size:13px;color:var(--ink2);flex:0 0 auto;}
+.barrow .track{flex:1;height:26px;background:#EDF3F0;border-radius:8px;overflow:hidden;position:relative;}
+.barrow .track i{display:block;height:100%;width:0;border-radius:8px;
+  background:linear-gradient(90deg,#BFD9CD,#98BFAE);
+  transition:width 1s cubic-bezier(.22,.61,.36,1) var(--bd,0s);}
+.barrow.me .track i{background:linear-gradient(90deg,var(--g600),var(--g500) 70%,#3CC08D);}
+.barrow.me .nm{color:var(--g800);font-weight:800;}
+.barrow .val{width:56px;font-size:13px;font-family:"Bahnschrift","Segoe UI",sans-serif;
+  color:var(--ink2);flex:0 0 auto;font-weight:600;}
+.barrow.me .val{color:var(--g700);font-weight:800;}
+.bignum{padding:16px 20px;display:flex;align-items:baseline;gap:12px;}
+.bignum .n{font-family:"Bahnschrift","Segoe UI",sans-serif;font-weight:800;font-size:52px;color:var(--g700);
+  letter-spacing:.01em;line-height:1;}
+.bignum .u{font-size:14px;color:var(--muted);}
+.bignum .lab{font-size:13px;color:var(--ink2);line-height:1.5;}
+.gainchip{display:inline-block;background:#FFF3D6;border:1px solid #EFD9A0;color:#A97B12;
+  font-size:12.5px;font-weight:800;border-radius:999px;padding:5px 12px;letter-spacing:.02em;}
+.gen{display:flex;gap:12px;margin-top:12px;}
+.gen .g{flex:1;padding:12px 14px;border-radius:12px;background:#fff;border:1px solid var(--line);}
+.gen .g b{font-size:15px;color:var(--g800);}
+.gen .g span{font-size:12px;color:var(--muted);display:block;margin-top:3px;line-height:1.5;}
+.gen .g .up{color:var(--g600);font-weight:800;}
+.protocol{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.6;}
+.protocol b{color:var(--ink2);}
+
+/* ---------- Slide6 消融 ---------- */
+.steps{display:flex;align-items:flex-end;gap:16px;height:238px;padding:0 6px 0 2px;}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.step .barv{width:100%;border-radius:10px 10px 4px 4px;background:linear-gradient(180deg,#BFD9CD,#A8C9BA);
+  height:0;transition:height .9s cubic-bezier(.22,.61,.36,1) var(--sd,0s);}
+.step.best .barv{background:linear-gradient(180deg,#1CA36F,var(--g600) 60%,var(--g700));
+  box-shadow:0 10px 26px rgba(18,128,95,.35);}
+.step .v{margin-top:8px;font-family:"Bahnschrift","Segoe UI",sans-serif;font-weight:800;font-size:19px;color:var(--ink2);}
+.step.best .v{color:var(--g700);font-size:22px;}
+.step .lb{font-size:12px;color:var(--muted);margin-top:2px;text-align:center;line-height:1.4;}
+.lossnote{margin-top:12px;font-size:12.5px;color:var(--ink2);line-height:1.7;background:#FFF7F5;
+  border:1px solid #F3D9D2;border-left:5px solid var(--red);border-radius:12px;padding:10px 14px;}
+.lossnote b{color:var(--red);}
+.caseimg{width:100%;border-radius:12px;border:1px solid var(--line);display:block;}
+.caserow{display:flex;gap:10px;margin-top:10px;}
+.caserow .c{flex:1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.55;color:var(--ink2);}
+.caserow .c b{display:block;font-size:13px;color:var(--g800);margin-bottom:3px;}
+.caserow .c .x{color:var(--red);font-weight:700;}
+.caserow .c .v{color:var(--g600);font-weight:800;}
+
+/* ---------- Slide7 讨论 ---------- */
+.repro{display:flex;gap:12px;margin-bottom:14px;}
+.repro .r{flex:1;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+.repro .r .k{font-size:11px;color:var(--gold6);font-weight:800;letter-spacing:.14em;margin-bottom:5px;}
+.repro .r p{font-size:12.5px;color:var(--ink2);line-height:1.55;}
+.repro .r p b{color:var(--g800);}
+.ideas{display:flex;gap:14px;}
+.idea{flex:1;padding:16px 18px;display:flex;flex-direction:column;}
+.idea .h{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.idea .h .n{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#5C4708;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.idea .h b{font-size:15px;color:var(--g900);}
+.idea p{font-size:13px;color:var(--ink2);line-height:1.68;}
+.idea p b{color:var(--g700);}
+.thanks{margin-top:16px;text-align:center;color:var(--g800);font-size:16px;font-weight:700;letter-spacing:.06em;}
+.thanks span{color:var(--gold6);}
+
+/* ---------- HUD ---------- */
+#hud{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;
+  align-items:center;gap:18px;pointer-events:none;}
+#hud .prog{width:280px;height:4px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden;}
+#hud .prog i{display:block;height:100%;width:14.28%;border-radius:2px;
+  background:linear-gradient(90deg,var(--gold),#F3D98A);transition:width .4s ease;}
+#hud .pgnum{color:#5C6B64;font-size:12px;font-family:"Bahnschrift","Segoe UI",sans-serif;letter-spacing:.12em;}
+#stage.dark #hud .pgnum{color:rgba(255,255,255,.8);}
+#stage.dark #hud .prog{background:rgba(255,255,255,.16);}
+#nav{position:absolute;right:26px;bottom:26px;display:flex;gap:8px;z-index:99;}
+#nav button{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.22);
+  background:rgba(10,40,30,.55);color:#fff;font-size:17px;cursor:pointer;backdrop-filter:blur(4px);
+  transition:all .25s ease;}
+#nav button:hover{background:rgba(23,160,111,.75);border-color:transparent;}
+.hint{position:absolute;left:26px;bottom:30px;color:rgba(255,255,255,.4);font-size:11.5px;letter-spacing:.05em;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- ============ Slide 1 封面 ============ -->
+  <section class="slide" id="s1">
+    <div class="grid"></div>
+    <div class="glow1"></div><div class="glow2"></div>
+    <div class="topbar fx" style="--d:.10s">
+      <div class="logochip"><img src="assets/logo.png" alt="重庆邮电大学"></div>
+      <div class="uni"><b>重庆邮电大学</b><span>慧心·极目团队</span></div>
+      <div class="datechip">组会论文汇报 · 2026.10.16</div>
+    </div>
+    <div class="center">
+      <div class="badge fx" style="--d:.25s"><i></i>CVPR 2026</div>
+      <h1 class="fx" style="--d:.38s">细粒度视频异常检测与渐进式跨粒度学习</h1>
+      <div class="en fx" style="--d:.50s">Fine-VAD: Towards Fine-Grained Video Anomaly Detection via Progressive Cross-Granularity Learning</div>
+      <div class="rule fx" style="--d:.60s"></div>
+      <div class="meta fx" style="--d:.70s">
+        <div><span class="k">TEAM</span><b>慧心·极目团队</b></div>
+        <div><span class="k">PRESENTER</span><b>李林</b></div>
+        <div><span class="k">DATE</span><b>2026.10.16</b></div>
+      </div>
+    </div>
+    <div class="paperline fx" style="--d:.85s">Menghao Zhang, Yiyan Zhu, Pengfei Ren, Haifeng Sun, Qi Qi, Zirui Zhuang, Huazheng Wang, Lei Zhang, Jianxin Liao, Jingyu Wang · Beijing University of Posts and Telecommunications</div>
+  </section>
+
+  <!-- ============ Slide 2 动机 ============ -->
+  <section class="slide" id="s2">
+    <div class="pad">
+      <div class="hd fx" style="--d:.05s"><div class="b1"></div><div class="no">01</div><h2>任务瓶颈与核心动机</h2><div class="tag">Motivation</div></div>
+      <div class="col2">
+        <div style="flex:0 0 396px;display:flex;flex-direction:column;">
+          <div class="card problem fx" style="--d:.15s">
+            <h3><span class="dot"></span>类间混淆 · Inter-class Confusion</h3>
+            <p>语义不同的异常共享「底层视觉基元」：<b>纵火 ↔ 爆炸</b>（火焰、烟雾），<b>袭击 ↔ 斗殴</b>（肢体冲突）——视觉特征彼此交织，类间边界模糊。</p>
+          </div>
+          <div class="card problem fx" style="--d:.27s;margin-top:14px;">
+            <h3><span class="dot"></span>类内差异大 · Intra-class Variation</h3>
+            <p>同类异常跨场景外观与尺度迥异：<b>纵火</b>既可能是角落里的纸团小火，也可能是开阔区域整辆车的剧烈燃烧。</p>
+          </div>
+          <div class="obs fx" style="--d:.39s">
+            <p><b>核心观察</b>：细粒度单类正样本有限，但「正常 / 异常」二值标注<b>通用且充足</b> → 提出<b>渐进式跨粒度学习</b>，由粗到细引导特征空间演化。</p>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+          <div class="fx" style="--d:.22s;font-size:13px;color:var(--muted);margin:2px 0 10px 2px;letter-spacing:.03em;">
+            图 1｜UCF-Crime 细粒度特征的 t-SNE 演化 —— <b style="color:var(--ink2)">传统方法 → CLIP 系方法 → Fine-VAD</b>
+          </div>
+          <div class="trio">
+            <div class="cell fx" style="--d:.34s"><div class="imgbox"><img src="assets/fig1-a.png" alt=""></div><div class="capT">(a) 传统方法</div><div class="capS">全部类别混杂</div></div>
+            <div class="cell fx" style="--d:.48s"><div class="imgbox"><img src="assets/fig1-b.png" alt=""></div><div class="capT">(b) CLIP 系方法</div><div class="capS">相似类仍重叠</div></div>
+            <div class="cell fx" style="--d:.62s"><div class="imgbox"><img src="assets/fig1-c.png" alt=""></div><div class="capT">(c) Fine-VAD</div><div class="capS">边界清晰 · 簇内紧凑</div></div>
+          </div>
+          <div class="fx" style="--d:.78s;margin-top:14px;display:flex;align-items:center;gap:12px;">
+            <img src="assets/fig1-legend.png" style="width:296px;border-radius:10px;border:1px solid var(--line);display:block;" alt="">
+            <div style="font-size:12px;color:var(--muted);line-height:1.7;">右下角为 13 类异常图例，<br>颜色对应各类别。</div>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><span>慧心·极目团队 · Fine-VAD 组会汇报</span><span>Fine-VAD · CVPR 2026</span></div>
+    </div>
+  </section>
+
+  <!-- ============ Slide 3 框架 ============ -->
+  <section class="slide" id="s3">
+    <div class="pad">
+      <div class="hd fx" style="--d:.05s"><div class="b1"></div><div class="no">02</div><h2>整体框架：冻结 CLIP 双塔 + 三级渐进对齐</h2><div class="tag">Framework</div></div>
+      <div class="kpis">
+        <div class="kpi fx" style="--d:.14s"><div class="ico">1</div><div><b>视频编码</b><span>Frozen CLIP Image Encoder + LGT-Adapter（局部窗口注意力 + 全局 GCN）</span></div></div>
+        <div class="kpi fx" style="--d:.24s"><div class="ico">2</div><div><b>文本原型</b><span>Frozen CLIP Text Encoder → 多粒度文本 Embedding</span></div></div>
+        <div class="kpi fx" style="--d:.34s"><div class="ico">3</div><div><b>三级对齐</b><span>Coarse → Intermediate → Fine，逐级引导特征演化</span></div></div>
+      </div>
+      <div class="figwrap fx" style="--d:.46s"><img src="assets/fig2.png" alt="Fine-VAD 整体框架"></div>
+      <div class="fx" style="--d:.62s;margin-top:12px;font-size:12.5px;color:var(--muted);text-align:center;letter-spacing:.04em;">
+        特征空间随三级监督逐步演化：<b style="color:var(--g700)">通用异常模式 → 粗类别边界 → 类别专属语义</b>
+      </div>
+      <div class="foot"><span>慧心·极目团队 · Fine-VAD 组会汇报</span><span>Fine-VAD · CVPR 2026</span></div>
+    </div>
+  </section>
+
+  <!-- ============ Slide 4 机制 ============ -->
+  <section class="slide" id="s4">
+    <div class="pad">
+      <div class="hd fx" style="--d:.05s"><div class="b1"></div><div class="no">03</div><h2>三级跨粒度学习机制</h2><div class="tag">Method</div></div>
+      <div class="lv">
+        <div class="card col fx" style="--d:.14s">
+          <div class="idx">1</div>
+          <h3>Coarse Level</h3><div class="sub">建立通用异常空间</div>
+          <ul>
+            <li>文本锚点 <b>[Normal; Anomaly]</b>，对齐图 <b>M<sub>coarse</sub> ∈ ℝ<sup>n×2</sup></b></li>
+            <li>损失：二值交叉熵 <b>ℒ<sub>bce</sub></b> + InfoNCE 对比损失 <b>ℒ<sub>cts</sub></b></li>
+            <li>作用：平抑类内差异，构建统一的异常表征基底</li>
+          </ul>
+        </div>
+        <div class="card col fx" style="--d:.26s">
+          <div class="idx">2</div>
+          <h3>Intermediate Level</h3><div class="sub">伪宏类结构先验</div>
+          <ul>
+            <li>仅对 <b>M 个异常类</b>文本嵌入做 K-Means（<b>K=4</b>），与 Normal 拼接为 <b>K+1</b> 个原型</li>
+            <li>以 M<sub>coarse</sub> 为 Query 注意力注入，更新为 <b>Ẽ<sub>pseudo</sub></b> → M<sub>inter</sub></li>
+            <li>无显式损失：软结构正则 + 提供宏类先验 <b>C<sub>p(i)</sub></b></li>
+          </ul>
+        </div>
+        <div class="card col fx" style="--d:.38s">
+          <div class="idx">3</div>
+          <h3>Fine Level</h3><div class="sub">化解类间混淆</div>
+          <ul>
+            <li>注意力引导得到精细对齐图 <b>M<sub>fine</sub> ∈ ℝ<sup>n×(M+1)</sup></b></li>
+            <li><b>Top-T（T=16）</b>多示例池化 → 类别级分数 <b>s</b></li>
+            <li>同宏类加权交叉熵 <b>ℒ<sub>refine</sub></b>：ω &gt; 1 加重惩罚</li>
+          </ul>
+        </div>
+      </div>
+      <div class="formulabar fx" style="--d:.52s">
+        <div style="flex:0 0 auto;">
+          <div class="fx-title">REFINEMENT LOSS</div>
+          <div class="formula">ℒ<sub>refine</sub> = − <span class="frac"><span>1</span><span>N</span></span>&thinsp;Σ<sub>i=1</sub><sup>N</sup>&thinsp;Σ<sub>j=0</sub><sup>M</sup>&thinsp;α<sub>i,j</sub>&thinsp;y<sub>i,j</sub>&thinsp;log&thinsp;s<sub>i,j</sub></div>
+        </div>
+        <div class="fb-note">
+          <b>α<sub>i,j</sub> = ω &gt; 1</b>（同宏类）｜<b>1</b>（其他）—— 强化「同族相近类别」之间的区分<br>
+          <b>推理</b>：某帧与异常类相似度高于阈值 σ 判为该类，全部低于 σ 判为正常
+        </div>
+      </div>
+      <div class="foot"><span>慧心·极目团队 · Fine-VAD 组会汇报</span><span>Fine-VAD · CVPR 2026</span></div>
+    </div>
+  </section>
+
+  <!-- ============ Slide 5 实验 ============ -->
+  <section class="slide" id="s5">
+    <div class="pad">
+      <div class="hd fx" style="--d:.05s"><div class="b1"></div><div class="no">04</div><h2>实验评估与 SOTA 对比</h2><div class="tag">Experiments</div></div>
+      <div class="col2" style="gap:26px;align-items:flex-start;">
+        <div style="flex:0 0 630px;">
+          <div class="fx" style="--d:.12s;font-size:13px;color:var(--muted);margin:2px 0 12px 2px;">
+            UCF-Crime · 平均 mAP（IoU 0.1–0.5 多阈值平均，仅统计异常视频）
+          </div>
+          <div class="bars">
+            <div class="barrow fx" style="--d:.20s"><span class="nm">AnomalyCLIP</span><div class="track"><i data-w="17.6"></i></div><span class="val">2.64</span></div>
+            <div class="barrow fx" style="--d:.26s"><span class="nm">Qwen2.5-VL-7B</span><div class="track"><i data-w="30.0"></i></div><span class="val">4.50</span></div>
+            <div class="barrow fx" style="--d:.32s"><span class="nm">OVVAD</span><div class="track"><i data-w="41.2"></i></div><span class="val">6.17</span></div>
+            <div class="barrow fx" style="--d:.38s"><span class="nm">VadCLIP</span><div class="track"><i data-w="44.6"></i></div><span class="val">6.68</span></div>
+            <div class="barrow fx" style="--d:.44s"><span class="nm">ExVAD (ICML&#39;25)</span><div class="track"><i data-w="67.7"></i></div><span class="val">10.15</span></div>
+            <div class="barrow me fx" style="--d:.52s"><span class="nm">Fine-VAD</span><div class="track"><i data-w="100"></i></div><span class="val">14.99</span></div>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+          <div class="card bignum fx" style="--d:.34s">
+            <span class="n" data-count="14.99" data-dec="2">0.00</span><span class="u">%</span>
+            <div style="line-height:1.5;margin-left:6px;">
+              <div style="font-size:13.5px;color:var(--g900);font-weight:700;">UCF-Crime · AVG mAP</div>
+              <div style="margin-top:7px;"><span class="gainchip">相对 ExVAD 提升 +47.7%</span></div>
+            </div>
+          </div>
+          <div class="card bignum fx" style="--d:.44s">
+            <span class="n" data-count="31.87" data-dec="2">0.00</span><span class="u">%</span>
+            <div style="line-height:1.5;margin-left:6px;">
+              <div style="font-size:13.5px;color:var(--g900);font-weight:700;">XD-Violence · AVG mAP</div>
+              <div style="margin-top:6px;font-size:12px;color:var(--muted);">6 类暴力相关异常 · 当时最优</div>
+            </div>
+          </div>
+          <div class="gen">
+            <div class="g fx" style="--d:.54s"><b>Fine<sub>CNN</sub>（I3D）</b><span>UCF-Crime <span class="up">+2.97</span> ｜ XD-Violence <span class="up">+1.93</span></span></div>
+            <div class="g fx" style="--d:.62s"><b>Fine<sub>MLLM</sub>（Qwen2.5-VL-7B）</b><span>UCF-Crime <span class="up">+8.47</span> ｜ XD-Violence <span class="up">+14.93</span></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="protocol fx" style="--d:.72s;">
+        <b>评测协议</b>：标准动作检测协议 —— 在 IoU 0.1 / 0.2 / 0.3 / 0.4 / 0.5 各阈值下分别计算 mAP 并取平均，且仅统计测试集中的异常视频。定位与分类错误被双重惩罚，因此各方法数值普遍不高（UCF-Crime 上此前多数方法仅在 1%~10% 量级），评估重点是相对性能增益。
+      </div>
+      <div class="foot"><span>慧心·极目团队 · Fine-VAD 组会汇报</span><span>Fine-VAD · CVPR 2026</span></div>
+    </div>
+  </section>
+
+  <!-- ============ Slide 6 消融与定性 ============ -->
+  <section class="slide" id="s6">
+    <div class="pad">
+      <div class="hd fx" style="--d:.05s"><div class="b1"></div><div class="no">05</div><h2>关键消融与定性验证</h2><div class="tag">Ablations &amp; Visualizations</div></div>
+      <div class="col2" style="gap:24px;align-items:flex-start;">
+        <div style="flex:0 0 556px;">
+          <div class="fx" style="--d:.12s;font-size:13px;color:var(--muted);margin:0 0 8px 2px;">
+            分级有效性（表 2）· UCF-Crime AVG mAP
+          </div>
+          <div class="steps">
+            <div class="step fx" style="--d:.20s"><div class="barv" data-h="57.6"></div><div class="v"><span data-count="8.64" data-dec="2">0.00</span>%</div><div class="lb">仅细粒度<br>Fine-only</div></div>
+            <div class="step fx" style="--d:.30s"><div class="barv" data-h="72.9"></div><div class="v">10.93%</div><div class="lb">单独 +Coarse</div></div>
+            <div class="step fx" style="--d:.40s"><div class="barv" data-h="77.4"></div><div class="v">11.60%</div><div class="lb">单独 +Intermediate</div></div>
+            <div class="step best fx" style="--d:.50s"><div class="barv" data-h="100"></div><div class="v">14.99%</div><div class="lb">三级完备<br>Full</div></div>
+          </div>
+          <div class="lossnote fx" style="--d:.62s;">
+            <b>损失消融（表 3）</b>：中间层加监督损失（ℒ<sub>mce</sub>）→ <b>12.58 / 11.96</b>（明显下降：伪标签噪声）；细级再叠加对比损失 → 14.86（轻微负收益）。
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div class="fx" style="--d:.30s;font-size:13px;color:var(--muted);margin:0 0 8px 2px;">
+            图 5｜定性对比（上：Fine-VAD ｜ 中：VadCLIP ｜ 下：AnomalyCLIP）
+          </div>
+          <img class="caseimg fx" style="--d:.40s;" src="assets/fig5.png" alt="定性对比">
+          <div class="caserow">
+            <div class="c fx" style="--d:.56s"><b>Explosion · 爆炸</b>VadCLIP 与 AnomalyCLIP 均误判为 <span class="x">Arson（纵火）</span>；<span class="v">Fine-VAD 正确</span></div>
+            <div class="c fx" style="--d:.66s"><b>Fighting · 斗殴</b>VadCLIP → <span class="x">Abuse</span>，AnomalyCLIP → <span class="x">Shooting</span>；<span class="v">Fine-VAD 正确</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><span>慧心·极目团队 · Fine-VAD 组会汇报</span><span>Fine-VAD · CVPR 2026</span></div>
+    </div>
+  </section>
+
+  <!-- ============ Slide 7 讨论 ============ -->
+  <section class="slide" id="s7">
+    <div class="pad">
+      <div class="hd fx" style="--d:.05s"><div class="b1"></div><div class="no">06</div><h2>复现情况与讨论思考</h2><div class="tag">Reproduction &amp; Discussion</div></div>
+      <div class="repro">
+        <div class="r fx" style="--d:.12s"><div class="k">DATA</div><p><b>UCF-Crime · XD-Violence</b><br>均为公开基准</p></div>
+        <div class="r fx" style="--d:.20s"><div class="k">TRAINING</div><p><b>单卡 RTX 4090</b> · Batch 64<br>共训练 10 个 Epoch</p></div>
+        <div class="r fx" style="--d:.28s"><div class="k">BACKBONE</div><p><b>Frozen CLIP ViT-B/16</b><br>+ 公开的 LGT-Adapter</p></div>
+        <div class="r fx" style="--d:.36s"><div class="k">CODE</div><p>未检索到官方开源实现<br>可基于 <b>VadCLIP</b> 复现核心模块</p></div>
+      </div>
+      <div class="ideas">
+        <div class="card idea fx" style="--d:.46s">
+          <div class="h"><span class="n">1</span><b>损失设计的可迁移性</b></div>
+          <p>「粗级对比聚流形 + 中间层无损失软引导 + 细级同簇加权交叉熵」——这套应对弱监督类别稀疏的组合策略，可直接尝试迁移到组内弱监督 / 开集异常检测 Baseline。</p>
+        </div>
+        <div class="card idea fx" style="--d:.56s">
+          <div class="h"><span class="n">2</span><b>聚类中心的动态化</b></div>
+          <p>本文宏类划分依赖<b>离线的文本 Prompt K-Means</b>，而文本先验与视频视觉特征存在域差；可探索多模态对齐或<b>最优传输（OT）</b>，实现视觉-文本动态自适应聚类。</p>
+        </div>
+        <div class="card idea fx" style="--d:.66s">
+          <div class="h"><span class="n">3</span><span style="font-size:15px;color:var(--g900);font-weight:700;">多标签复合异常</span></div>
+          <p>方法预设每段视频仅含一种主导异常；真实安防中「车祸 + 起火」等复合事件常见。单路径跨层级注意力如何扩展为<b>多标签并发检测</b>，是值得深入的研究切入点。</p>
+        </div>
+      </div>
+      <div class="thanks fx" style="--d:.78s">谢谢！<span>欢迎各位老师和同学批评指正</span></div>
+      <div class="foot"><span>慧心·极目团队 · Fine-VAD 组会汇报</span><span>Fine-VAD · CVPR 2026</span></div>
+    </div>
+  </section>
+
+  <div id="hud"><div class="prog"><i></i></div><div class="pgnum" id="pgnum">01 / 07</div></div>
+  <div id="nav">
+    <button id="prev" title="上一页">&#8249;</button>
+    <button id="next" title="下一页">&#8250;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length, cur = -1;
+  var prog = document.querySelector('#hud .prog i');
+  var pgnum = document.getElementById('pgnum');
+
+  function fit(){
+    var s = Math.min(window.innerWidth/1280, window.innerHeight/720) * 0.985;
+    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit); fit();
+
+  function countUp(el){
+    var t = parseFloat(el.getAttribute('data-count'));
+    var d = parseInt(el.getAttribute('data-dec') || '0', 10);
+    var t0 = performance.now(), dur = 950;
+    function tick(now){
+      var p = Math.min(1, (now - t0) / dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = (t * e).toFixed(d);
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function enter(s){
+    s.classList.add('active');
+    var fxs = s.querySelectorAll('.fx');
+    for (var i = 0; i < fxs.length; i++) fxs[i].classList.remove('on');
+    void s.offsetWidth;
+    for (var i = 0; i < fxs.length; i++) fxs[i].classList.add('on');
+    var cs = s.querySelectorAll('[data-count]');
+    for (var i = 0; i < cs.length; i++) countUp(cs[i]);
+    s.querySelectorAll('.track i').forEach(function(el, i){
+      el.style.width = '0%';
+      setTimeout(function(){ el.style.width = (el.getAttribute('data-w') || 0) + '%'; }, 260 + i * 120);
+    });
+    s.querySelectorAll('.barv').forEach(function(el, i){
+      el.style.height = '0%';
+      setTimeout(function(){ el.style.height = (el.getAttribute('data-h') || 0) + '%'; }, 320 + i * 150);
+    });
+  }
+  function leave(s){
+    s.classList.remove('active');
+    var fxs = s.querySelectorAll('.fx');
+    for (var i = 0; i < fxs.length; i++) fxs[i].classList.remove('on');
+    s.querySelectorAll('.track i').forEach(function(el){ el.style.width = '0%'; });
+    s.querySelectorAll('.barv').forEach(function(el){ el.style.height = '0%'; });
+  }
+  function go(n){
+    if (n < 0 || n >= total || n === cur) return;
+    if (cur >= 0) leave(slides[cur]);
+    cur = n; enter(slides[cur]);
+    stage.classList.toggle('dark', cur === 0);
+    prog.style.width = ((cur + 1) / total * 100) + '%';
+    pgnum.textContent = ('0' + (cur + 1)).slice(-2) + ' / ' + ('0' + total).slice(-2);
+  }
+  document.getElementById('prev').addEventListener('click', function(){ go(cur - 1); });
+  document.getElementById('next').addEventListener('click', function(){ go(cur + 1); });
+  window.addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown' || k === 'Enter'){ e.preventDefault(); go(cur + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp'){ e.preventDefault(); go(cur - 1); }
+    else if (k === 'Home'){ go(0); }
+    else if (k === 'End'){ go(total - 1); }
+    else if (k === 'f' || k === 'F'){
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+  go(0);
+})();
+</script>
+</body>
+</html>
+
